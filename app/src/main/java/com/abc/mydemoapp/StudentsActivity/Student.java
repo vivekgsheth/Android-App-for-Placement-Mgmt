@@ -3,7 +3,7 @@ package com.abc.mydemoapp.StudentsActivity;
 public class Student {
     String id,emailaddress,branchname,password,idnumber,role;
     float cpi;
-
+//This is Student class empty constructor
     public  Student()
     {
 
