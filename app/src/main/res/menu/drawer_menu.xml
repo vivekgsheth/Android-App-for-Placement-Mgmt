@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_myprofile"
+            android:icon="@drawable/ic_myprofile"
+            android:title="Profile" />
+        <item
+            android:id="@+id/nav_studentlist"
+            android:icon="@drawable/ic_viewlist"
+            android:title="Student List" />
+        <item
+            android:id="@+id/nav_Companylist"
+            android:icon="@drawable/ic_viewlist"
+            android:title="Company List" />
+        <item
+            android:id="@+id/nav_message"
+            android:icon="@drawable/ic_message"
+            android:title="Send TAN" />
+    </group>
+</menu>
