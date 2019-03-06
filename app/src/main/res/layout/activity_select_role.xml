@@ -48,7 +48,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:background="@drawable/bgbtn"
-        android:text="Sign In"
+        android:text="Sign Up"
         android:textAllCaps="false"
         android:textColor="#FFF"
         android:textSize="18sp"

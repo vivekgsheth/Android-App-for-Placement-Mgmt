@@ -25,10 +25,11 @@ import com.google.firebase.database.FirebaseDatabase;
 public class SignUpActivity extends AppCompatActivity {
 
     DatabaseReference databasestudent;
+
     String role;
     EditText email;
     EditText pass;
-    EditText cpi,idnumber;
+    EditText cpi,Studentname;
     FirebaseAuth mAuth;
     Button signupbtn,loginbtn;
     Spinner spinner;
@@ -43,8 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         signupbtn = (Button)findViewById(R.id.signupbtn);
         spinner = (Spinner)findViewById(R.id.spinner);
-        idnumber = (EditText)findViewById(R.id.Idnumber);
-        databasestudent = FirebaseDatabase.getInstance().getReference("Students");
+        Studentname = (EditText)findViewById(R.id.Studentname);
         //If we donot pass anything in the getreference method then we will get the reference of the
         //root node but we want the reference of the Students node.
 
@@ -52,6 +52,7 @@ public class SignUpActivity extends AppCompatActivity {
         Intent intent = getIntent();
         role = intent.getStringExtra(SelectRoleActivity.EXTRA_TEXT);
         //Here we are retrieving the user selection of the activity.
+        databasestudent = FirebaseDatabase.getInstance().getReference(role);
 
         ArrayAdapter<String> myadapter = new ArrayAdapter<String>
                 (SignUpActivity.this,android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.branchname));
@@ -74,11 +75,15 @@ public class SignUpActivity extends AppCompatActivity {
                 //checking password and confirm password match
                 //if(pass.getText().toString().equals(pass1.getText().toString()))
                 //{
-                if(!TextUtils.isEmpty(cpi.getText().toString())&&!TextUtils.isEmpty(idnumber.getText().toString()))
+                if(!TextUtils.isEmpty(cpi.getText().toString())&&!TextUtils.isEmpty(Studentname.getText().toString()))
                 {
                     //Toast.makeText(SignUpActivity.this,"Calling firebase methods to register users...",Toast.LENGTH_LONG).show();
-
-
+                    float temp = Float.parseFloat(cpi.getText().toString());
+                    if(temp<5.0||temp>10.0)
+                    {
+                        Toast.makeText(SignUpActivity.this,"Cpi must be between 5.0 to 10.0 ...",Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     //Verification mail code
                     mAuth.createUserWithEmailAndPassword(email.getText().toString(), pass.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -96,7 +101,7 @@ public class SignUpActivity extends AppCompatActivity {
                                             email.setText("");
                                             pass.setText("");
                                             cpi.setText("");
-                                            idnumber.setText("");
+                                            Studentname.setText("");
                                         }
                                         else
                                         {
@@ -105,10 +110,11 @@ public class SignUpActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-
+                                //email_password_role
                             float cpis = Float.parseFloat(cpi.getText().toString());
+
                             String id = databasestudent.push().getKey();
-                            Student student = new Student(id,email.getText().toString(),spinner.getSelectedItem().toString(),pass.getText().toString(),idnumber.getText().toString(),cpis,role);
+                            Student student = new Student(id,email.getText().toString(),spinner.getSelectedItem().toString(),pass.getText().toString(),Studentname.getText().toString(),cpis,role);
                             databasestudent.child(id).setValue(student);
                             }
                             else {

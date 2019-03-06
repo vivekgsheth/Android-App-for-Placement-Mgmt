@@ -26,7 +26,10 @@
             android:name=".StudentsActivity.ProfileActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ForgotPasswordActivity" />
-        <activity android:name=".SelectRoleActivity"></activity>
+        <activity android:name=".SelectRoleActivity" />
+        <activity android:name=".CompanyActivity.ProfileCompanyActivity" />
+        <activity android:name=".CompanyActivity.CompanySignupActivity" />
+        <activity android:name=".TPOActivity.TPOProfileActivity" />
     </application>
 
 </manifest>

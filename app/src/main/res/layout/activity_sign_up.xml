@@ -86,7 +86,7 @@
 
 
     <EditText
-        android:id="@+id/Idnumber"
+        android:id="@+id/Studentname"
         android:layout_width="288dp"
         android:layout_height="50dp"
         android:layout_marginStart="48dp"
@@ -95,7 +95,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:background="@drawable/bginput"
-        android:hint="Id number"
+        android:hint="Name"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"

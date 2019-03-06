@@ -3,6 +3,9 @@
     <string name="pass_hint">Password..</string>
     <string name="Email_hint">Email</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
     <string-array name="names">
         <item>Student</item>
         <item>Company</item>

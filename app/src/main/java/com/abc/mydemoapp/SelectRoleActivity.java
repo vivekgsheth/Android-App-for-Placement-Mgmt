@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.abc.mydemoapp.CompanyActivity.Company;
+import com.abc.mydemoapp.CompanyActivity.CompanySignupActivity;
 import com.abc.mydemoapp.StudentsActivity.SignUpActivity;
 
 public class SelectRoleActivity extends AppCompatActivity {
@@ -36,10 +38,21 @@ public class SelectRoleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String role = spinner.getSelectedItem().toString();
-                Intent intent = new Intent(SelectRoleActivity.this, SignUpActivity.class);
-                intent.putExtra(EXTRA_TEXT,role);
-                //By using above line we are passing the user selected role from this activity to SignUpActivity.
-                startActivity(intent);
+                if(role.equals("Student")) {
+                    Intent intent = new Intent(SelectRoleActivity.this, SignUpActivity.class);
+                    intent.putExtra(EXTRA_TEXT, role);
+                    //Here EXTRA_TEXT is the key and role is the value.
+                    //By using above line we are passing the user selected role from this activity to SignUpActivity.
+                    startActivity(intent);
+                }
+                else
+                {
+                    Intent intent = new Intent(SelectRoleActivity.this, CompanySignupActivity.class);
+                    intent.putExtra(EXTRA_TEXT, role);
+                    //Here EXTRA_TEXT is the key and role is the value.
+                    //By using above line we are passing the user selected role from this activity to CompanySignupActivity.
+                    startActivity(intent);
+                }
             }
         });
     }
