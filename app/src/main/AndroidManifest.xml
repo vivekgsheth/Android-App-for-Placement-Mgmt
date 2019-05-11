@@ -30,6 +30,22 @@
         <activity android:name=".CompanyActivity.ProfileCompanyActivity" />
         <activity android:name=".CompanyActivity.CompanySignupActivity" />
         <activity android:name=".TPOActivity.TPOProfileActivity" />
+        <activity android:name=".TPOActivity.UpdateCompanyActivity" />
+        <activity android:name=".TPOActivity.StudentUpdateActivity" />
+        <activity android:name=".CompanyActivity.AddJobActivity" />
+        <activity android:name=".CompanyActivity.RequestTANActivity" />
+        <activity android:name=".CompanyActivity.TanmailActivity" />
+        <activity android:name=".TPOActivity.SendTANTPOActivity" />
+        <activity android:name=".CompanyActivity.JobUpdateActivity" />
+        <activity android:name=".StudentsActivity.showjobdetailsActivity" />
+        <activity android:name=".customhomestudent" />
+        <activity android:name=".StudentsActivity.AppliedJobDetails" />
+        <activity android:name=".TPOActivity.SelectedStudentDetailsActivity" />
+        <activity android:name=".StudentsActivity.ShowPendingJobDetails" />
+        <activity android:name=".StudentsActivity.VerifyStudentActivity" />
+        <activity android:name=".TPOActivity.StudentDetailsActivity" />
+        <activity android:name=".CompanyActivity.VerifyCompanyActivity" />
+        <activity android:name=".TPOActivity.CompanyDetailsActivity"></activity>
     </application>
 
 </manifest>

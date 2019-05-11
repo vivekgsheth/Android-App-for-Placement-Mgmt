@@ -15,4 +15,13 @@
         <item>IT</item>
         <item>EC</item>
     </string-array>
+
+
+    <string-array name="year">
+        <item>2016</item>
+        <item>2017</item>
+
+    </string-array>
+
+
 </resources>

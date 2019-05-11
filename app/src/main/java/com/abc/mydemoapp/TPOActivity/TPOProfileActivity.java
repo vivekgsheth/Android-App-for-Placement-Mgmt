@@ -82,9 +82,17 @@ public class TPOProfileActivity extends AppCompatActivity implements NavigationV
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new StudentListFragment()).commit();
                 break;
+            case R.id.nav_selectedstudentlist:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new SelectedStudentListFragment()).commit();
+                break;
             case R.id.nav_myprofile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new ProfileFragment()).commit();
+                break;
+            case R.id.nav_messagestudent:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new SendStudentTANFragment()).commit();
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);

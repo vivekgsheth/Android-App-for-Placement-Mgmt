@@ -35,16 +35,31 @@ public class CompanySignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_company_signup);
 
         pass = (EditText)findViewById(R.id.pass);
+        pass.setText(getIntent().getStringExtra("cpass"));
+        pass.setEnabled(false);
         email = (EditText)findViewById(R.id.email);
+        email.setText(getIntent().getStringExtra("cemail"));
+        email.setEnabled(false);
         companyname = (EditText)findViewById(R.id.companyname);
+        companyname.setText(getIntent().getStringExtra("cname"));
+        companyname.setEnabled(false);
+
+
+
         companyaddress = (EditText)findViewById(R.id.companyaddress);
+        companyaddress.setText(getIntent().getStringExtra("caddress"));
+        companyaddress.setEnabled(false);
         TAN = (EditText)findViewById(R.id.TAN);
+        TAN.setText(getIntent().getStringExtra("tan"));
+        TAN.setEnabled(false);
+
         mAuth = FirebaseAuth.getInstance();
         loginbtn =(Button)findViewById(R.id.loginbtn);
         signupbtn = (Button)findViewById(R.id.signupbtn);
 
-        Intent intent = getIntent();
-        role = intent.getStringExtra(SelectRoleActivity.EXTRA_TEXT);
+        //Intent intent = getIntent();
+        //role = intent.getStringExtra(SelectRoleActivity.EXTRA_TEXT);
+        role="Company";
         //Here we are retrieving the user selection of the activity.
         databasecompany = FirebaseDatabase.getInstance().getReference(role);
 
@@ -97,8 +112,8 @@ public class CompanySignupActivity extends AppCompatActivity {
 
 
                                 String id = databasecompany.push().getKey();
-                                Company company = new Company(id,companyname.getText().toString(),companyaddress.getText().toString(),TAN.getText().toString(),email.getText().toString(),pass.getText().toString(),role);
-                                databasecompany.child(id).setValue(company);
+                              //  Company company = new Company(id,companyname.getText().toString(),companyaddress.getText().toString(),TAN.getText().toString(),email.getText().toString(),pass.getText().toString(),role);
+                                //databasecompany.child(id).setValue(company);
                             }
                             else {
                                 Toast.makeText(CompanySignupActivity.this, task.getException().getMessage(),
@@ -121,7 +136,5 @@ public class CompanySignupActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 }

@@ -16,9 +16,19 @@
             android:id="@+id/nav_Companylist"
             android:icon="@drawable/ic_viewlist"
             android:title="Company List" />
+
+        <item
+            android:id="@+id/nav_selectedstudentlist"
+            android:icon="@drawable/ic_viewlist"
+            android:title="Selected Students" />
+
         <item
             android:id="@+id/nav_message"
-            android:icon="@drawable/ic_message"
-            android:title="Send TAN" />
+            android:icon="@drawable/ic_viewlist"
+            android:title="Verify Student" />
+        <item
+            android:id="@+id/nav_messagestudent"
+            android:icon="@drawable/ic_viewlist"
+            android:title="Verify Company" />
     </group>
 </menu>

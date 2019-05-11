@@ -1,15 +1,17 @@
 package com.abc.mydemoapp.StudentsActivity;
 
 public class Student {
-    String id,emailaddress,branchname,password,name,role;
+    String id,emailaddress,branchname,password,name,role,rollno;
     float cpi;
+    boolean selected;
+    int year;
 //This is Student class empty constructor
     public  Student()
     {
 
     }
 
-    public Student(String id,String emailaddress, String branchname, String password, String name, float cpi,String role) {
+    public Student(String id,String emailaddress, String branchname, String password, String name, float cpi,String role,String rollno,int year) {
         this.emailaddress = emailaddress;
         this.branchname = branchname;
         this.password = password;
@@ -17,7 +19,33 @@ public class Student {
         this.cpi = cpi;
         this.role = role;
         this.id = id;
+        this.rollno=rollno;
+        selected = false;
+        this.year=year;
+    }
 
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public String getRollno() {
+        return rollno;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public void setRollno(String rollno) {
+        this.rollno = rollno;
     }
 
     public void setId(String id) {

@@ -19,6 +19,9 @@ import com.abc.mydemoapp.CompanyActivity.Company;
 import com.abc.mydemoapp.CompanyActivity.ProfileCompanyActivity;
 import com.abc.mydemoapp.StudentsActivity.ProfileActivity;
 import com.abc.mydemoapp.StudentsActivity.Student;
+import com.abc.mydemoapp.TPOActivity.RejectCompany;
+import com.abc.mydemoapp.TPOActivity.RejectStudent;
+import com.abc.mydemoapp.TPOActivity.StudentTan;
 import com.abc.mydemoapp.TPOActivity.TPOProfileActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,15 +38,19 @@ public class MainActivity extends AppCompatActivity {
 
     Spinner spinner2;
     DatabaseReference dbref;
+    DatabaseReference  dbrejectcomp,dbrejectstudent,dbstudenttan ;
     FirebaseAuth userAuth;
     EditText pass,email;
+    Boolean wegetmail;
+
     Button forgotpasswordbtn,loginbtn,signupbtn;
     RelativeLayout rellay1,rellay2;
+
     Handler handler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
-        public void run() {//Code for splashing in the app(i.e. For rainbow that appears at the starting and then
-                                //goes away... )
+        public void run() {
+            //Code for splashing in the app(i.e. For rainbow that appears at the starting and then goes away... )
             rellay1.setVisibility(View.VISIBLE);
             rellay2.setVisibility(View.VISIBLE);
         }
@@ -65,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
         userAuth = FirebaseAuth.getInstance();
         handler.postDelayed(runnable,2000);//2000 is the timeout for splash
 
+        dbrejectstudent = FirebaseDatabase.getInstance().getReference("RejectStudent");
+        dbstudenttan=FirebaseDatabase.getInstance().getReference("StudentTan");
+        dbrejectcomp = FirebaseDatabase.getInstance().getReference("RejectCompany");
         //Initializing dropdown list
         ArrayAdapter<String> myadapter = new ArrayAdapter<String>
                 (MainActivity.this,android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.names));
@@ -72,144 +82,251 @@ public class MainActivity extends AppCompatActivity {
         myadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner2.setAdapter(myadapter);
 
-       signupbtn.setOnClickListener(new View.OnClickListener(){
-           @Override
-           public void onClick(View v) {
-               Intent intent = new Intent(MainActivity.this,SelectRoleActivity.class);
-               startActivity(intent);
-           }
-       });
-
-       loginbtn.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-            //User Authentication code for realtime database
-            final String roleselection = spinner2.getSelectedItem().toString();
-
-            if(email.getText().toString().equals("harshsrivastva18@gmail.com")&&pass.getText().toString().equals("123456"))
-            {
-                Intent intent = new Intent(MainActivity.this,TPOProfileActivity.class);
+        signupbtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,SelectRoleActivity.class);
                 startActivity(intent);
-                return;
             }
+        });
+
+        loginbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //User Authentication code for realtime database
+                final String roleselection = spinner2.getSelectedItem().toString();
+
+                //Now we are taking the email address of the currently logged in user globally.
+                ((Home)getApplication()).setEmailaddress(email.getText().toString());
+//               Home h = new Home();
+//               h.setEmailaddress(email.getText().toString());
+                //Log.w(((Home)getApplication()).getEmailaddress(),"Email Address...");
+
+                if(email.getText().toString().equals("harshsrivastva18@gmail.com")&&pass.getText().toString().equals("123456"))
+                {
+                    Intent intent = new Intent(MainActivity.this,TPOProfileActivity.class);
+                    startActivity(intent);
+                    return;
+                }
+                if(email.length() == 0 || pass.length() == 0)
+                {
+                    Toast.makeText(MainActivity.this,"Not Valid Credentials...",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                dbstudenttan.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists())
+                            for(DataSnapshot ds : dataSnapshot.getChildren()) {
 
 
-              /* Log.d("Query Value",query.toString());
-               if(query.equals(null))
-               {
-                   Toast.makeText(MainActivity.this, "Enter correct credentials", Toast.LENGTH_LONG).show();
-                   return;
-               }*/
+                                StudentTan studentTan = ds.getValue(StudentTan.class);
+                                if (studentTan.getStudentemail().equals(email.getText().toString())) {
+                                    wegetmail=true;
+                                    Log.w("wegetmail...","Demo");
+                                }
+                            }
+                        else
+                        {
+                            Log.w("Not initialized...","Demo");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                dbrejectcomp.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists())
+                            for(DataSnapshot ds : dataSnapshot.getChildren()) {
+
+
+                                RejectCompany rejectStudent = ds.getValue(RejectCompany.class);
+                                if (rejectStudent.getCompanyemailadress().equals(email.getText().toString())) {
+                                    if(rejectStudent.getReject() == true)
+                                    {
+                                        Toast.makeText(MainActivity.this,"You are rejected by tpo...",Toast.LENGTH_LONG).show();
+                                        return;
+                                    }
+//                                    else if(rejectStudent.getReject() != true && wegetmail == true)
+//                                    {
+//                                        Toast.makeText(MainActivity.this,"Wait for tpo approve...",Toast.LENGTH_LONG).show();
+//                                        return;
+//                                    }
+                                }
+                            }
+                        else
+                        {
+                            Log.w("Not initialized...","Demo");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                dbrejectstudent.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists())
+                            for(DataSnapshot ds : dataSnapshot.getChildren()) {
+
+
+                                RejectStudent rejectStudent = ds.getValue(RejectStudent.class);
+                                if (rejectStudent.getStudentemail().equals(email.getText().toString())) {
+                                    if(rejectStudent.getReject() == true)
+                                    {
+                                        Toast.makeText(MainActivity.this,"You are rejected by tpo...",Toast.LENGTH_LONG).show();
+                                        return;
+                                    }
+                                    else if(rejectStudent.getReject() != true && wegetmail == true)
+                                    {
+                                        Toast.makeText(MainActivity.this,"Wait for tpo approve...",Toast.LENGTH_LONG).show();
+                                        return;
+                                    }
+                                }
+                            }
+                        else
+                        {
+                            Log.w("Not initialized...","Demo");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
 
                 //User Authentication code for Authentication in firebase.
-               userAuth.signInWithEmailAndPassword(email.getText().toString(),pass.getText().toString())
-                       .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                           @Override
-                           public void onComplete(@NonNull Task<AuthResult> task) {
-                               if(task.isSuccessful())
-                               {
+                userAuth.signInWithEmailAndPassword(email.getText().toString(),pass.getText().toString())
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful())
+                                {
+                                    //checking if the user has verified the email or not
+                                    if(userAuth.getCurrentUser().isEmailVerified())
+                                    {
+                                        //Query for ordering all the node accoding to email address
+                                        Query query = FirebaseDatabase.getInstance().getReference(roleselection).
+                                                orderByChild("emailaddress").equalTo(email.getText().toString());
 
 
-                                   //checking if the user has verified the email or not
-                                   if(userAuth.getCurrentUser().isEmailVerified())
-                                   {
-                                       //Query for ordering all the node accoding to email address
-                                       Query query = FirebaseDatabase.getInstance().getReference(roleselection).
-                                               orderByChild("emailaddress").equalTo(email.getText().toString());
+                                        if(roleselection.equals("Student")) {
+                                            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    //Checking whether the User exists or not.
+                                                    if (dataSnapshot.exists()) {
+                                                        for (DataSnapshot user : dataSnapshot.getChildren()) {
+                                                            Student student  = user.getValue(Student.class);
+
+                                                            //Verifying the selected field
+
+//                                                            if(student.isSelected()){
+//                                                                Toast.makeText(MainActivity.this,"You are already placed...",Toast.LENGTH_LONG).show();
+//                                                                return;
+//
+//                                                            }
 
 
-                                       if(roleselection.equals("Student")) {
-                                           query.addListenerForSingleValueEvent(new ValueEventListener() {
-                                               @Override
-                                               public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                   //Checking whether the User exists or not.
-                                                   if (dataSnapshot.exists()) {
-                                                       for (DataSnapshot user : dataSnapshot.getChildren()) {
-                                                           Student student  = user.getValue(Student.class);
-                                                           //Verifying the password and role of the user.
-                                                           if(student.getPassword().equals(pass.getText().toString())&&student.getRole().equals(roleselection))
-                                                           {
-                                                               //If correct then go to next activity.
-                                                               Intent intent = new Intent(MainActivity.this,ProfileActivity.class);
-                                                               startActivity(intent);
-                                                           }
-                                                           else
-                                                           {
-                                                               //If wrong then display the following message.
-                                                               Toast.makeText(MainActivity.this,"Invalid credentials...",Toast.LENGTH_LONG).show();
-                                                               return;
-                                                           }
-                                                       }
 
-                                                   }
-                                                   //If user does not exists.
-                                                   else
-                                                   {
-                                                       Toast.makeText(MainActivity.this,"No such user exists...",Toast.LENGTH_LONG).show();
-                                                       return;
-                                                   }
-                                               }
+                                                            //Verifying the password and role of the user.
 
-                                               @Override
-                                               public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                               }
-                                           });
-                                       }
-                                       if(roleselection.equals("Company")) {
-                                           query.addListenerForSingleValueEvent(new ValueEventListener() {
-                                               @Override
-                                               public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                   if (dataSnapshot.exists()) {
-                                                       for (DataSnapshot user : dataSnapshot.getChildren()) {
-                                                           Company company = user.getValue(Company.class);
-                                                           if(company.password.equals(pass.getText().toString())&&company.role.equals(roleselection))
-                                                           {
-                                                               Intent intent = new Intent(MainActivity.this,ProfileCompanyActivity.class);
-                                                               startActivity(intent);
-                                                           }
-                                                           else
-                                                           {
-                                                               Toast.makeText(MainActivity.this,"Invalid credentials",Toast.LENGTH_LONG).show();
-                                                               return;
-                                                           }
-                                                       }
-                                                   }
-                                                   else
-                                                   {
-                                                       Toast.makeText(MainActivity.this,"No such company exists...",Toast.LENGTH_LONG).show();
-                                                       return;
-                                                   }
-                                               }
+                                                            if(student.getRole().equals(roleselection))
+                                                            {
+                                                                //If correct then go to next activity.
+                                                                Intent intent = new Intent(MainActivity.this,ProfileActivity.class);
+                                                                startActivity(intent);
+                                                            }
+                                                            else
+                                                            {
+                                                                //If wrong then display the following message.
+                                                                Toast.makeText(MainActivity.this,"Invalid credentials...",Toast.LENGTH_LONG).show();
+                                                                return;
+                                                            }
+                                                        }
 
-                                               @Override
-                                               public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                    }
+                                                    //If user does not exists.
+                                                    else
+                                                    {
+                                                        Toast.makeText(MainActivity.this,"No such user exists...",Toast.LENGTH_LONG).show();
+                                                        return;
+                                                    }
+                                                }
 
-                                               }
-                                           });
-                                       }
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                   }
-                                   else
-                                   {
-                                       Toast.makeText(MainActivity.this,"Please verify your email address...",Toast.LENGTH_LONG).show();
-                                   }
+                                                }
+                                            });
+                                        }
+                                        if(roleselection.equals("Company")) {
+                                            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    if (dataSnapshot.exists()) {
+                                                        for (DataSnapshot user : dataSnapshot.getChildren()) {
+                                                            Company company = user.getValue(Company.class);
+                                                            if(company.role.equals(roleselection))
+                                                            {
+                                                                Intent intent = new Intent(MainActivity.this,ProfileCompanyActivity.class);
+                                                                startActivity(intent);
+                                                            }
+                                                            else
+                                                            {
+                                                                Toast.makeText(MainActivity.this,"Invalid credentials",Toast.LENGTH_LONG).show();
+                                                                return;
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        Toast.makeText(MainActivity.this,"No such company exists...",Toast.LENGTH_LONG).show();
+                                                        return;
+                                                    }
+                                                }
 
-                               }
-                               else
-                               {
-                                   Toast.makeText(MainActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
-                               }
-                           }
-                       });
-           }
-       });
-       forgotpasswordbtn.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Intent intent = new Intent(MainActivity.this,ForgotPasswordActivity.class);
-               startActivity(intent);
-           }
-       });
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                }
+                                            });
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(MainActivity.this,"Please verify your email address...",Toast.LENGTH_LONG).show();
+                                    }
+
+                                }
+                                else
+                                {
+                                    Toast.makeText(MainActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+            }
+        });
+
+        forgotpasswordbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,ForgotPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }

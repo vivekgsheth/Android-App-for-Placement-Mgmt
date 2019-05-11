@@ -25,12 +25,11 @@ import com.google.firebase.database.FirebaseDatabase;
 public class SignUpActivity extends AppCompatActivity {
 
     DatabaseReference databasestudent;
-
+    FirebaseAuth mAuth;
     String role;
     EditText email;
     EditText pass;
-    EditText cpi,Studentname;
-    FirebaseAuth mAuth;
+    EditText cpi,Studentname,rollno;
     Button signupbtn,loginbtn;
     Spinner spinner;
     @Override
@@ -47,10 +46,11 @@ public class SignUpActivity extends AppCompatActivity {
         Studentname = (EditText)findViewById(R.id.Studentname);
         //If we donot pass anything in the getreference method then we will get the reference of the
         //root node but we want the reference of the Students node.
+        rollno =  (EditText)findViewById(R.id.rollno);
 
-
-        Intent intent = getIntent();
-        role = intent.getStringExtra(SelectRoleActivity.EXTRA_TEXT);
+       // Intent intent = getIntent();
+       // role = intent.getStringExtra(SelectRoleActivity.EXTRA_TEXT);
+        role="Student";
         //Here we are retrieving the user selection of the activity.
         databasestudent = FirebaseDatabase.getInstance().getReference(role);
 
@@ -75,7 +75,7 @@ public class SignUpActivity extends AppCompatActivity {
                 //checking password and confirm password match
                 //if(pass.getText().toString().equals(pass1.getText().toString()))
                 //{
-                if(!TextUtils.isEmpty(cpi.getText().toString())&&!TextUtils.isEmpty(Studentname.getText().toString()))
+                if(!TextUtils.isEmpty(cpi.getText().toString())&&!TextUtils.isEmpty(Studentname.getText().toString()) && !TextUtils.isEmpty(rollno.getText().toString()))
                 {
                     //Toast.makeText(SignUpActivity.this,"Calling firebase methods to register users...",Toast.LENGTH_LONG).show();
                     float temp = Float.parseFloat(cpi.getText().toString());
@@ -84,6 +84,13 @@ public class SignUpActivity extends AppCompatActivity {
                         Toast.makeText(SignUpActivity.this,"Cpi must be between 5.0 to 10.0 ...",Toast.LENGTH_LONG).show();
                         return;
                     }
+
+                    if(Studentname.getText().toString().matches(".*\\d+.*"))
+                    {
+                        Toast.makeText(SignUpActivity.this,"Enter valid username...",Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
                     //Verification mail code
                     mAuth.createUserWithEmailAndPassword(email.getText().toString(), pass.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -102,6 +109,7 @@ public class SignUpActivity extends AppCompatActivity {
                                             pass.setText("");
                                             cpi.setText("");
                                             Studentname.setText("");
+                                            rollno.setText("");
                                         }
                                         else
                                         {
@@ -114,8 +122,8 @@ public class SignUpActivity extends AppCompatActivity {
                             float cpis = Float.parseFloat(cpi.getText().toString());
 
                             String id = databasestudent.push().getKey();
-                            Student student = new Student(id,email.getText().toString(),spinner.getSelectedItem().toString(),pass.getText().toString(),Studentname.getText().toString(),cpis,role);
-                            databasestudent.child(id).setValue(student);
+                            //Student student = new Student(id,email.getText().toString(),spinner.getSelectedItem().toString(),pass.getText().toString(),Studentname.getText().toString(),cpis,role,rollno.getText().toString());
+                            //databasestudent.child(id).setValue(student);
                             }
                             else {
                                 Toast.makeText(SignUpActivity.this, task.getException().getMessage(),

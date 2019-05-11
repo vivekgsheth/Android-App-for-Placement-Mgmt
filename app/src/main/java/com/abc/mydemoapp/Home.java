@@ -13,6 +13,17 @@ import com.google.firebase.auth.FirebaseUser;
 //have to login again.User will be directed back to the ProfileActivity.
 
 public class Home extends Application {
+
+    private String emailaddress;
+
+    public String getEmailaddress() {
+        return emailaddress;
+    }
+
+    public void setEmailaddress(String emailaddress) {
+        this.emailaddress = emailaddress;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
